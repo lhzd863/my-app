@@ -1,0 +1,2 @@
+const CTITLE_DATA_TYPE = 'CTITLE_DATA_TYPE';
+export default CTITLE_DATA_TYPE ;

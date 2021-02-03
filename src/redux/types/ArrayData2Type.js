@@ -1,0 +1,3 @@
+const ARRAY_DATA2_TYPE = 'ARRAY_DATA2_TYPE';
+
+export default ARRAY_DATA2_TYPE ;

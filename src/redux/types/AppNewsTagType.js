@@ -1,0 +1,2 @@
+const APP_NEWS_TAG_TYPE = 'APP_NEWS_TAG_TYPE';
+export default APP_NEWS_TAG_TYPE ;

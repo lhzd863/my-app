@@ -1,0 +1,2 @@
+const XAXIS8_DATA_TYPE = 'XAXIS8_DATA_TYPE';
+export default XAXIS8_DATA_TYPE ;

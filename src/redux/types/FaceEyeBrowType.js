@@ -1,0 +1,2 @@
+const FACE_EYEBROW_TYPE = 'FACE_EYEBROW_TYPE';
+export default FACE_EYEBROW_TYPE ;

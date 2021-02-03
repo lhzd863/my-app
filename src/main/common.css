@@ -1,0 +1,10 @@
+.list-card-img{
+    float:left;
+    width:60px;
+    height:60px;
+}
+.list-card-text{
+    line-height:60px;
+    vertical-align:middle;
+    text-align:left;
+}

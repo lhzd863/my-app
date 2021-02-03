@@ -1,0 +1,2 @@
+const XAXIS2_DATA_TYPE = 'XAXIS2_DATA_TYPE';
+export default XAXIS2_DATA_TYPE ;

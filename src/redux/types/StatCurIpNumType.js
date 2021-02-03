@@ -1,0 +1,2 @@
+const STAT_CUR_IP_NUM_TYPE = 'STAT_CUR_IP_NUM_TYPE';
+export default STAT_CUR_IP_NUM_TYPE ;

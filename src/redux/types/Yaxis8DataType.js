@@ -1,0 +1,2 @@
+const YAXIS8_DATA_TYPE = 'YAXIS8_DATA_TYPE';
+export default YAXIS8_DATA_TYPE ;

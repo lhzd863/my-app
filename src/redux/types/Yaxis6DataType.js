@@ -1,0 +1,2 @@
+const YAXIS6_DATA_TYPE = 'YAXIS6_DATA_TYPE';
+export default YAXIS6_DATA_TYPE ;

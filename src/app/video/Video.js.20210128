@@ -1,0 +1,166 @@
+import React, { Component } from 'react';
+import { WingBlank, WhiteSpace, Button } from 'antd-mobile';
+import "../../common/common.css";
+import MyHeader from '../../components/MyHeader.js';
+import { createForm } from 'rc-form';
+import PropTypes from 'prop-types';
+import Upload from 'rc-upload';
+import axios from 'axios';
+
+class Video extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            video_op: props.video_op || ''
+        };
+    }
+    handleVideoDowith(e){
+       this.handleData()
+    }
+    handleData() {
+        var stat_dt = this.state.stat_dt;
+        if (stat_dt === undefined || stat_dt.length < 1) {
+            var nowDate = new Date();
+            var year = nowDate.getFullYear();
+            var month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+            var day = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate();
+            var dateStr = year + "-" + month + "-" + day;
+            stat_dt = dateStr;
+        }
+
+        var const_video_filename = this.props.video_file_name;
+        if (const_video_filename === undefined || const_video_filename.length < 1){
+           return
+        }
+        var const_video_op = this.props.video_op;
+        if (const_video_op === undefined || const_video_op.length < 1){
+           return
+        }
+
+        let accesstoken = '';
+        if (JSON.parse(localStorage.getItem(global.constants.const_localstorage_id) || '[]')[0] === undefined ||
+            JSON.parse(localStorage.getItem(global.constants.const_localstorage_id) || '[]')[0].username === undefined) {
+            accesstoken = global.constants.const_default_accesstoken;
+        } else {
+            accesstoken = JSON.parse(localStorage.getItem(global.constants.const_localstorage_id) || '[]')[0].accesstoken;
+        }
+        let url = global.constants.const_api_url + "/app/video/op?accesstoken=" + accesstoken;
+        fetch(url, {
+            method: "Post",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify({
+                filename: const_video_filename,op:const_video_op
+            })
+        })
+            .then(response => response.json())
+            .then((dat) => {
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+    }
+
+    render() {
+        let accesstoken = '';
+        if (JSON.parse(localStorage.getItem(global.constants.const_localstorage_id) || '[]')[0] === undefined ||
+            JSON.parse(localStorage.getItem(global.constants.const_localstorage_id) || '[]')[0].username === undefined) {
+            accesstoken = global.constants.const_default_accesstoken;
+        } else {
+            accesstoken = JSON.parse(localStorage.getItem(global.constants.const_localstorage_id) || '[]')[0].accesstoken;
+        }
+        let url = global.constants.const_api_url + "/app/video/upload?accesstoken=" + accesstoken;
+        const uploadProps = {
+                  action: url,
+                  multiple: false,
+                  data: {},
+                  headers: {
+                      'Access-Control-Allow-Origin': '*'
+                  },
+                  onStart(file) {
+                      console.log('onStart', file, file.name);
+                  },
+                  onSuccess(res, file) {
+                      //console.log('onSuccess', res[0].filename);
+                      //this.props.videoFileNameCreate(res[0].filename);
+                      this.props.videoOpCreate(res[0].filename)
+                  },
+                  onError(err) {
+                      console.log('onError', err);
+                  },
+                  onProgress({ percent }, file) {
+                      console.log('onProgress', `${percent}%`, file.name);
+                  },
+                  customRequest({
+                      action,
+                      data,
+                      file,
+                      filename,
+                      headers,
+                      onError,
+                      onProgress,
+                      onSuccess,
+                  }) {
+                      const formData = new FormData();
+                      if (data) {
+                         Object.keys(data).forEach(key => {
+                            formData.append(key, data[key]);
+                         });
+                       }
+                       formData.append(filename, file);
+                       axios
+                         .post(action, formData, {
+                            headers,
+                            onUploadProgress: ({ total, loaded }) => {
+                              onProgress({ percent: Math.round((loaded / total) * 100).toFixed(2) }, file);
+                            },
+                         })
+                         .then(({ data: response }) => {
+                             onSuccess(response, file);
+                         })
+                         .catch(onError);
+                       return {
+                         abort() {
+                            console.log('upload progress is aborted.');
+                         },
+                       };
+                    },
+         };
+
+        
+        return (
+            <div>
+                <MyHeader myheadertitle={global.constants.const_app_stat_accesslog} />
+                <WhiteSpace size="lg" />
+                <WingBlank size="lg">
+                <div style={{ margin: 30,}} >
+                  <div>
+                     <Upload {...uploadProps}>
+                        <button type="button">开始上传</button>
+                     </Upload>
+                  </div>
+                </div>
+                <div><Button type="primary" onClick={(e) => {this.handleVideoDowith(e);}}>拍照</Button></div>
+                </WingBlank>
+            </div >
+        );
+    }
+    static propTypes = {
+        video_file_name: PropTypes.string,
+        videoFileNameCreate: PropTypes.func,
+        video_op: PropTypes.string,
+        videoOpCreate: PropTypes.func,
+        video_url: PropTypes.string,
+        videoUrlCreate: PropTypes.func,
+        display_console: PropTypes.string,
+        displayConsoleCreate: PropTypes.func,
+    }
+}
+
+const VideoWrapper = createForm()(Video);
+export default VideoWrapper;
+
